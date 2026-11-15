@@ -1,4 +1,4 @@
-"""A camada de API testada sem banco: troca-se o repositório via dependency_overrides."""
+
 
 import pytest
 from fastapi.testclient import TestClient
