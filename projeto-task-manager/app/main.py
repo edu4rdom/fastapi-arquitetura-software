@@ -1,4 +1,4 @@
-"""Raiz de composição: monta a aplicação a partir de configuração e rotas."""
+
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -12,12 +12,12 @@ from app.database import init_db
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
-    """Fábrica da aplicação: cada chamada devolve uma instância independente."""
+
     settings = settings or Settings.from_env()
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-        init_db(settings.database_path)  # garante o esquema antes da 1ª requisição
+        init_db(settings.database_path)  
         yield
 
     app = FastAPI(
