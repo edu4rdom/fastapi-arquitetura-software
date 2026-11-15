@@ -1,4 +1,4 @@
-"""Testes de API: requisições HTTP reais ao app, com SQLite temporário."""
+
 
 import pytest
 
