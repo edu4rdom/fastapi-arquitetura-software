@@ -1,0 +1,42 @@
+flowchart TB
+    subgraph fa["Pacote fastapi"]
+        app["FastAPI<br/>applications.py"]
+        routing["APIRouter e APIRoute<br/>routing.py"]
+        deps["Injeção de dependências<br/>dependencies/"]
+        params["Declaração de parâmetros<br/>params.py"]
+        openapi["OpenAPI e docs<br/>openapi/"]
+        security["Esquemas de segurança<br/>security/"]
+        enc["Serialização<br/>encoders.py"]
+        exc["Erros<br/>exceptions.py"]
+        compat["Compatibilidade com Pydantic<br/>_compat/"]
+        reexp["Reexportações<br/>requests, responses, testclient"]
+        cli["CLI fastapi<br/>cli.py"]
+    end
+    subgraph st["Starlette"]
+        stapp["Starlette app"]
+        strouter["Router e Route"]
+        stmid["Middleware"]
+        streq["Request e Response"]
+        stconc["run_in_threadpool"]
+    end
+    pyd["Pydantic"]
+    uv["Uvicorn"]
+    app -.->|"herda de"| stapp
+    routing -.->|"herda de"| strouter
+    app -->|"cria self.router"| routing
+    app -->|"registra /openapi.json, /docs, /redoc"| openapi
+    routing -->|"get_dependant e solve_dependencies"| deps
+    deps -->|"lê Depends, Query, Body"| params
+    security -->|"usados como dependências"| deps
+    routing -->|"serializa respostas"| enc
+    routing -->|"levanta erros de validação"| exc
+    deps --> compat
+    routing --> compat
+    compat -->|"campos, validação, esquema"| pyd
+    openapi -.->|"percorre as rotas (inferido)"| routing
+    routing -->|"request_response"| streq
+    routing -->|"endpoint síncrono"| stconc
+    app -->|"add_middleware"| stmid
+    reexp -->|"reexporta"| st
+    cli -->|"inicia"| uv
+    uv -->|"ASGI"| app

@@ -1,0 +1,32 @@
+flowchart TB
+    cliente(["Cliente HTTP"])
+    subgraph api["Camada de API: FastAPI e Pydantic"]
+        routes["routes/tasks.py<br/>APIRouter"]
+        schemas["schemas.py<br/>TaskCreate, TaskUpdate, TaskRead"]
+        deps["dependencies.py<br/>cadeia de Depends"]
+        errs["error_handlers.py"]
+    end
+    subgraph svc["Camada de serviço"]
+        service["TaskService<br/>regras RN1, RN2, RN3"]
+    end
+    subgraph repo["Camada de persistência"]
+        proto["TaskRepository<br/>Protocol: o contrato"]
+        sqlrepo["SQLiteTaskRepository"]
+    end
+    subgraph infra["Infraestrutura"]
+        cfg["config.py e database.py"]
+        db[("SQLite<br/>tasks.db")]
+    end
+    domain["Domínio<br/>Task, enums, exceções"]
+    cliente -->|"HTTP e JSON"| routes
+    routes -->|"valida entrada e saída"| schemas
+    routes -->|"chama"| service
+    deps -.->|"monta e injeta"| service
+    deps -.->|"conexão por requisição"| cfg
+    service -->|"usa o contrato"| proto
+    sqlrepo -.->|"implementa"| proto
+    sqlrepo -->|"SQL parametrizado"| db
+    errs -.->|"exceção de domínio vira status HTTP"| domain
+    service --> domain
+    sqlrepo --> domain
+    routes --> domain

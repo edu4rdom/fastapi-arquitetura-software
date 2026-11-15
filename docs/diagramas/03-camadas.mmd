@@ -1,0 +1,31 @@
+flowchart TB
+    codigo["Código do desenvolvedor<br/>path operations, dependências, modelos"]
+    subgraph fastapi["Pacote fastapi: organização modular"]
+        direction TB
+        a["applications.py"]
+        r["routing.py"]
+        d["dependencies/"]
+        p["params.py"]
+        o["openapi/"]
+        s["security/"]
+        e["encoders.py"]
+        x["exceptions.py"]
+        c["_compat/"]
+    end
+    subgraph base["Fundações"]
+        direction LR
+        star["Starlette<br/>ASGI, roteamento, middleware, Request, Response"]
+        pyd["Pydantic<br/>validação, serialização, JSON Schema"]
+    end
+    host["Uvicorn<br/>servidor ASGI hospedeiro"]
+    codigo -->|"usa"| fastapi
+    a -->|"importa"| r
+    r -->|"importa"| d
+    r -->|"importa"| e
+    r -->|"importa"| x
+    d -->|"usa"| p
+    a -->|"registra rotas"| o
+    s -.->|"usado via Depends"| d
+    fastapi -->|"herda e usa"| star
+    c -->|"delega"| pyd
+    host -.->|"chama via ASGI"| a

@@ -1,0 +1,30 @@
+flowchart LR
+    dev(["Desenvolvedor de aplicações"])
+    mant(["Mantenedores e colaboradores"])
+    cliente(["Cliente HTTP ou WebSocket"])
+    leitor(["Pessoa que consulta a documentação interativa"])
+    subgraph limite["Sistema em estudo"]
+        fastapi["FastAPI<br/>pacote Python fastapi"]
+    end
+    uvicorn["Servidor ASGI<br/>Uvicorn"]
+    starlette["Starlette<br/>toolkit ASGI"]
+    pydantic["Pydantic<br/>validação e serialização"]
+    ui["Swagger UI e ReDoc"]
+    ferr["Ferramentas OpenAPI<br/>geradores de cliente, validadores"]
+    pypi["PyPI, uv e pip"]
+    gh["GitHub<br/>repositório, Actions, CodSpeed"]
+    cloud["FastAPI Cloud"]
+    ext["Bancos de dados e serviços externos<br/>acessados pelo código da aplicação"]
+    dev -->|"declara rotas, tipos e dependências"| fastapi
+    dev -->|"instala"| pypi
+    dev -->|"fastapi deploy"| cloud
+    cliente -->|"requisições HTTP"| uvicorn
+    uvicorn -->|"interface ASGI"| fastapi
+    fastapi -->|"herda e reutiliza"| starlette
+    fastapi -->|"delega dados"| pydantic
+    fastapi -->|"gera /openapi.json e HTML"| ui
+    leitor -->|"abre /docs e /redoc"| ui
+    ferr -->|"consomem o esquema OpenAPI"| fastapi
+    mant -->|"PRs, revisões, releases"| gh
+    gh -->|"publica o pacote"| pypi
+    fastapi -.->|"dependências injetam conexões"| ext

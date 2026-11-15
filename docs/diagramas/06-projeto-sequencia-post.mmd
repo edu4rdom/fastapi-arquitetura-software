@@ -1,0 +1,26 @@
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant R as Rota create_task
+    participant S as TaskService
+    participant P as SQLiteTaskRepository
+    participant D as SQLite
+    C->>R: POST /tasks com JSON
+    Note over R: FastAPI valida o corpo com TaskCreate e resolve os Depends
+    R->>S: create_task com title, description e priority
+    S->>S: normaliza o título
+    S->>P: exists_active_title
+    P->>D: SELECT parametrizado
+    D-->>P: resultado
+    P-->>S: existe ou não
+    alt título já usado por tarefa ativa
+        S-->>R: DuplicateTaskTitleError
+        R-->>C: 409 pelo error handler
+    else título livre
+        S->>P: add com NewTask
+        P->>D: INSERT e COMMIT
+        D-->>P: id gerado
+        P-->>S: Task
+        S-->>R: Task
+        R-->>C: 201 com TaskRead em JSON
+    end

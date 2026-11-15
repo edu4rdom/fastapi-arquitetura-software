@@ -1,0 +1,43 @@
+sequenceDiagram
+    autonumber
+    actor C as Cliente HTTP
+    participant U as Uvicorn
+    participant A as FastAPI app
+    participant M as Pilha de middlewares
+    participant R as APIRouter
+    participant H as Handler da APIRoute
+    participant D as solve_dependencies
+    participant P as Pydantic
+    participant E as Função do endpoint
+    participant S as serialize_response
+    C->>U: Requisição HTTP
+    U->>A: Chamada ASGI com scope, receive e send
+    A->>M: Delega ao Starlette
+    Note over A,M: Pilha construída na primeira requisição
+    M->>R: Chega ao roteador, camada mais interna
+    R->>R: Casa o caminho (regex) e o método
+    R->>H: Invoca o app da rota, criado por request_response
+    H->>H: Lê o corpo (JSON ou formulário)
+    H->>D: solve_dependencies com request, dependant e body
+    loop Para cada sub-dependência
+        D->>D: Aplica override, consulta cache e executa
+    end
+    D->>P: Valida path, query, header, cookie e body
+    P-->>D: Valores validados ou erros
+    alt Há erros de validação
+        D-->>H: Lista de erros
+        H-->>M: RequestValidationError tratado, resposta 422
+    else Sem erros
+        D-->>H: Argumentos validados
+        H->>E: Chama o endpoint
+        Note over H,E: async direto, sync em threadpool
+        E-->>H: Valor de retorno
+        H->>S: serialize_response com response_model
+        S->>P: Valida e serializa o retorno
+        P-->>S: Dados prontos
+        S-->>H: Conteúdo da resposta
+        H-->>M: Response
+    end
+    M-->>U: Resposta ASGI
+    U-->>C: Resposta HTTP
+    Note over D,H: Dependências com yield registram limpeza num AsyncExitStack
