@@ -4,7 +4,7 @@ Trabalho da disciplina de **Arquitetura de Software** (Engenharia de Software).
 Analisa o repositório [fastapi/fastapi](https://github.com/fastapi/fastapi) em cinco atividades e aplica o que foi
 aprendido num projeto próprio, a **Task Manager API**.
 
-> Autores: [Nome 1], [Nome 2], [Nome 3] · Professor(a): [Nome] · Instituição: [Nome] · 2026
+> Autores: Eduardo de Macedo, Endrik Thibes · Professor(a): Paulo Roberto Farah · Instituição: UDESC · 2026
 
 ## O que há neste repositório
 
@@ -34,18 +34,12 @@ Atividade 5.
 
 ```bash
 cd projeto-task-manager
-python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+python -m venv .venv && source .venv/bin/activate   
 pip install -r requirements-dev.txt
-pytest                                  # 52 testes
-uvicorn app.main:app --reload           # documentação em http://127.0.0.1:8000/docs
+pytest                                  
+uvicorn app.main:app --reload           
 ```
-
-## Diagramas
-
-Os arquivos de `docs/diagramas/*.mmd` podem ser colados em <https://mermaid.live>. O GitHub também renderiza
-blocos ```` ```mermaid ```` diretamente em arquivos Markdown.
 
 ## Status dos testes
 
-<!-- Depois de criar o repositório, troque USUARIO e REPOSITORIO e descomente: -->
-<!-- ![tests](https://github.com/USUARIO/REPOSITORIO/actions/workflows/tests.yml/badge.svg) -->
+![tests](https://github.com/edu4rdom/fastapi-arquitetura-software/actions/workflows/tests.yml/badge.svg)
