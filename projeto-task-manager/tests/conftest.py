@@ -12,7 +12,6 @@ from tests.fakes import FakeTaskRepository
 
 
 class FakeClock:
-    """Relógio controlável: cada chamada avança 1 minuto."""
 
     def __init__(self) -> None:
         self._now = datetime(2026, 1, 1, 12, 0, tzinfo=timezone.utc)
@@ -25,7 +24,6 @@ class FakeClock:
 
 @pytest.fixture
 def fake_service() -> TaskService:
-    """Serviço isolado: repositório em memória e relógio fixo (teste unitário)."""
     return TaskService(FakeTaskRepository(), clock=FakeClock())
 
 
@@ -45,7 +43,6 @@ def sqlite_repository(db_path):
 
 @pytest.fixture
 def client(tmp_path):
-    """Aplicação completa com um SQLite temporário (teste de integração via HTTP)."""
     settings = Settings(database_path=str(tmp_path / "api.db"))
     with TestClient(create_app(settings)) as test_client:
         yield test_client
