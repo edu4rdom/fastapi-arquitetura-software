@@ -1,4 +1,4 @@
-"""Configuração da aplicação, lida do ambiente em um único ponto."""
+
 
 import os
 from dataclasses import dataclass
