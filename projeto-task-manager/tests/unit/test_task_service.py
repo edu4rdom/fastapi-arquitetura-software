@@ -1,4 +1,4 @@
-"""Testes unitários das regras de negócio: sem HTTP e sem banco de dados."""
+
 
 import pytest
 
