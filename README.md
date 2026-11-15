@@ -42,4 +42,4 @@ uvicorn app.main:app --reload
 
 ## Status dos testes
 
-![tests](https://github.com/edu4rdom/fastapi-arquitetura-software/actions/workflows/tests.yml/badge.svg)
+![tests](https://github.com/edu4rdom/fastapi-arquitetura-software/actions/workflows/test.yml/badge.svg)
