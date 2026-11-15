@@ -9,7 +9,7 @@ Recomendado: Python 3.11 ou superior (testado em 3.12; o código usa a sintaxe `
 e as versões mais recentes do FastAPI deixaram de suportar o 3.10).
 
 ```bash
-python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+python -m venv .venv && source .venv/bin/activate  
 pip install -r requirements-dev.txt
 uvicorn app.main:app --reload
 ```
@@ -20,7 +20,7 @@ Banco: arquivo `tasks.db` (altere com a variável `TASKS_DB_PATH`).
 ## Testar
 
 ```bash
-pytest                      # todos os testes
+pytest                   
 pytest --cov=app --cov-report=term-missing
 ```
 
