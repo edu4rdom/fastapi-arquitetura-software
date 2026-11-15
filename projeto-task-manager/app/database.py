@@ -1,4 +1,4 @@
-"""Infraestrutura de acesso ao SQLite: conexão e criação do esquema."""
+
 
 import sqlite3
 
@@ -23,9 +23,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS uq_tasks_active_title
 
 
 def connect(db_path: str) -> sqlite3.Connection:
-    # check_same_thread=False: o FastAPI executa dependências e endpoints síncronos
-    # em threads do pool, então a mesma conexão (usada de forma sequencial por uma
-    # única requisição) pode passar por threads diferentes.
+
     connection = sqlite3.connect(db_path, check_same_thread=False)
     connection.row_factory = sqlite3.Row
     return connection
